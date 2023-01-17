@@ -8,6 +8,7 @@
 #include "private/linked_queue.h"
 
 #include <test/cmocka.h>
+#include "test/linked_queue.h"
 
 static void check_invalidate_error_on_object_is_null(void **state) {
     octopus_error = OCTOPUS_ERROR_NONE;
