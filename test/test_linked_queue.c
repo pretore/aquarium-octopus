@@ -18,26 +18,6 @@ static void check_invalidate_error_on_object_is_null(void **state) {
     octopus_error = OCTOPUS_ERROR_NONE;
 }
 
-static void check_invalidate(void **state) {
-    octopus_error = OCTOPUS_ERROR_NONE;
-    struct octopus_linked_queue object = {};
-    assert_true(octopus_linked_queue_invalidate(&object, NULL));
-    octopus_error = OCTOPUS_ERROR_NONE;
-}
-
-static void check_invalidate_case_mutexes_are_busy(void **state) {
-    octopus_error = OCTOPUS_ERROR_NONE;
-    struct octopus_linked_queue object = {};
-    pthread_mutex_destroy_is_overridden = true;
-    will_return_count(cmocka_test_pthread_mutex_destroy, EBUSY, 2);
-    will_return(cmocka_test_pthread_mutex_destroy, 0);
-    will_return_count(cmocka_test_pthread_mutex_destroy, EBUSY, 5);
-    will_return(cmocka_test_pthread_mutex_destroy, 0);
-    assert_true(octopus_linked_queue_invalidate(&object, NULL));
-    pthread_mutex_destroy_is_overridden = false;
-    octopus_error = OCTOPUS_ERROR_NONE;
-}
-
 static void check_init_error_on_object_is_null(void **state) {
     octopus_error = OCTOPUS_ERROR_NONE;
     assert_false(octopus_linked_queue_init(NULL, 1));
@@ -296,8 +276,6 @@ static void check_peek_error_on_queue_is_empty(void **state) {
 int main(int argc, char *argv[]) {
     const struct CMUnitTest tests[] = {
             cmocka_unit_test(check_invalidate_error_on_object_is_null),
-            cmocka_unit_test(check_invalidate),
-            cmocka_unit_test(check_invalidate_case_mutexes_are_busy),
             cmocka_unit_test(check_init_error_on_object_is_null),
             cmocka_unit_test(check_init_error_on_size_is_zero),
             cmocka_unit_test(check_init_error_on_size_is_too_large),

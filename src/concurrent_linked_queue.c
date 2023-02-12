@@ -114,7 +114,7 @@ bool octopus_concurrent_linked_queue_init(
                     break;
                 }
             }
-            for (uintmax_t o = 0; o <= i; o++) {
+            for (uintmax_t o = 0; o < i; o++) {
                 struct octopus_linked_queue *queue;
                 seagrass_required_true(coral_array_list_get(
                         &object->queues, o, (void **) &queue));

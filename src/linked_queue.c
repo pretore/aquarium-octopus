@@ -61,22 +61,7 @@ bool octopus_linked_queue_invalidate(
     };
     const uintmax_t limit = sizeof(locks) / sizeof(pthread_mutex_t *);
     for (uintmax_t i = 0; i < limit; i++) {
-        do {
-            int error;
-            if ((error = pthread_mutex_destroy(locks[i]))) {
-                if (EINVAL == error) {
-                    break;
-                }
-                seagrass_required_true(EBUSY == error);
-                const struct timespec delay = {
-                        .tv_nsec = 1000
-                };
-                seagrass_required_true(!nanosleep(&delay, NULL)
-                                       || errno == EINTR);
-                continue;
-            }
-            break;
-        } while (true);
+        seagrass_required_true(!pthread_mutex_destroy(locks[i]));
     }
     seagrass_required_true(coral_linked_queue_invalidate(
             &object->queue, on_destroy));
